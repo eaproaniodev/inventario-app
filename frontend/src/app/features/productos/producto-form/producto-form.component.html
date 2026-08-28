@@ -1,0 +1,105 @@
+<div class="card form-card">
+  <h2>{{ modoEdicion ? 'Editar producto' : 'Nuevo producto' }}</h2>
+
+  @if (cargandoProducto()) {
+    <p>Cargando producto...</p>
+  } @else {
+    <form [formGroup]="form" (ngSubmit)="guardar()">
+      <div class="form-grid">
+        <div class="form-row">
+          <label>Nombre *</label>
+          <input
+            type="text"
+            formControlName="nombre"
+            [class.invalid]="f.nombre.invalid && f.nombre.touched"
+            placeholder="Ej: Laptop Dell Inspiron 15"
+          />
+          @if (f.nombre.invalid && f.nombre.touched) {
+            <span class="error-text">
+              @if (f.nombre.errors?.['required']) { El nombre es obligatorio. }
+              @if (f.nombre.errors?.['minlength']) { Debe tener al menos 2 caracteres. }
+              @if (f.nombre.errors?.['maxlength']) { Máximo 150 caracteres. }
+            </span>
+          }
+        </div>
+
+        <div class="form-row">
+          <label>Categoría *</label>
+          <input
+            type="text"
+            formControlName="categoria"
+            [class.invalid]="f.categoria.invalid && f.categoria.touched"
+            placeholder="Ej: Tecnología"
+          />
+          @if (f.categoria.invalid && f.categoria.touched) {
+            <span class="error-text">La categoría es obligatoria.</span>
+          }
+        </div>
+
+        <div class="form-row" style="grid-column: 1 / -1;">
+          <label>Descripción</label>
+          <textarea
+            formControlName="descripcion"
+            rows="3"
+            [class.invalid]="f.descripcion.invalid && f.descripcion.touched"
+            placeholder="Descripción del producto (opcional)"
+          ></textarea>
+          @if (f.descripcion.invalid && f.descripcion.touched) {
+            <span class="error-text">Máximo 500 caracteres.</span>
+          }
+        </div>
+
+        <div class="form-row" style="grid-column: 1 / -1;">
+          <label>URL de imagen</label>
+          <input
+            type="text"
+            formControlName="imagenUrl"
+            [class.invalid]="f.imagenUrl.invalid && f.imagenUrl.touched"
+            placeholder="https://..."
+          />
+          @if (f.imagenUrl.invalid && f.imagenUrl.touched) {
+            <span class="error-text">Debe ser una URL válida (http/https).</span>
+          }
+        </div>
+
+        <div class="form-row">
+          <label>Precio *</label>
+          <input
+            type="number"
+            step="0.01"
+            formControlName="precio"
+            [class.invalid]="f.precio.invalid && f.precio.touched"
+          />
+          @if (f.precio.invalid && f.precio.touched) {
+            <span class="error-text">
+              @if (f.precio.errors?.['required']) { El precio es obligatorio. }
+              @if (f.precio.errors?.['min']) { El precio debe ser mayor a 0. }
+            </span>
+          }
+        </div>
+
+        <div class="form-row">
+          <label>Stock *</label>
+          <input
+            type="number"
+            formControlName="stock"
+            [class.invalid]="f.stock.invalid && f.stock.touched"
+          />
+          @if (f.stock.invalid && f.stock.touched) {
+            <span class="error-text">
+              @if (f.stock.errors?.['required']) { El stock es obligatorio. }
+              @if (f.stock.errors?.['min']) { El stock no puede ser negativo. }
+            </span>
+          }
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <a routerLink="/productos" class="btn-secondary" style="text-decoration:none; display:inline-block;">Cancelar</a>
+        <button type="submit" class="btn-primary" [disabled]="guardando()">
+          {{ guardando() ? 'Guardando...' : 'Guardar' }}
+        </button>
+      </div>
+    </form>
+  }
+</div>

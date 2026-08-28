@@ -1,0 +1,97 @@
+<div class="card">
+  <div class="list-header">
+    <h2>Productos</h2>
+    <div class="list-header__actions">
+      <button class="btn-secondary" (click)="mostrarFiltros.set(!mostrarFiltros())">
+        {{ mostrarFiltros() ? 'Ocultar filtros' : 'Filtros avanzados' }}
+      </button>
+      <a routerLink="/productos/nuevo" class="btn-primary" style="text-decoration:none; display:inline-block;">+ Nuevo producto</a>
+    </div>
+  </div>
+
+  @if (mostrarFiltros()) {
+    <div class="filters-panel">
+      <div class="filters-grid">
+        <div class="form-row">
+          <label>Nombre</label>
+          <input type="text" [(ngModel)]="filtros.nombre" placeholder="Buscar por nombre..." />
+        </div>
+        <div class="form-row">
+          <label>Categoría</label>
+          <input type="text" [(ngModel)]="filtros.categoria" placeholder="Ej: Tecnología" />
+        </div>
+        <div class="form-row">
+          <label>Precio mínimo</label>
+          <input type="number" [(ngModel)]="filtros.precioMin" min="0" />
+        </div>
+        <div class="form-row">
+          <label>Precio máximo</label>
+          <input type="number" [(ngModel)]="filtros.precioMax" min="0" />
+        </div>
+        <div class="form-row">
+          <label>Stock mínimo</label>
+          <input type="number" [(ngModel)]="filtros.stockMin" min="0" />
+        </div>
+      </div>
+      <div class="filters-actions">
+        <button class="btn-secondary" (click)="limpiarFiltros()">Limpiar</button>
+        <button class="btn-primary" (click)="aplicarFiltros()">Aplicar filtros</button>
+      </div>
+    </div>
+  }
+
+  @if (cargando()) {
+    <p>Cargando productos...</p>
+  } @else if (productos().length === 0) {
+    <p>No se encontraron productos con los criterios indicados.</p>
+  } @else {
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Categoría</th>
+          <th>Precio</th>
+          <th>Stock</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (producto of productos(); track producto.id) {
+          <tr>
+            <td>{{ producto.id }}</td>
+            <td>{{ producto.nombre }}</td>
+            <td>{{ producto.categoria }}</td>
+            <td>{{ producto.precio | currency }}</td>
+            <td>
+              <span [style.color]="producto.stock === 0 ? '#dc2626' : 'inherit'">
+                {{ producto.stock }}
+              </span>
+            </td>
+            <td>
+              <a [routerLink]="['/productos/editar', producto.id]" class="btn-secondary" style="text-decoration:none; margin-right:6px;">Editar</a>
+              <button class="btn-danger" (click)="confirmarEliminar(producto)">Eliminar</button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+    <app-paginator
+      [page]="filtros.page"
+      [pageSize]="filtros.pageSize"
+      [totalItems]="totalItems()"
+      [totalPages]="totalPages()"
+      (pageChange)="onPageChange($event)"
+      (pageSizeChange)="onPageSizeChange($event)"
+    />
+  }
+</div>
+
+<app-confirm-dialog
+  [visible]="!!productoAEliminar"
+  titulo="Eliminar producto"
+  [mensaje]="'¿Desea eliminar el producto ' + (productoAEliminar?.nombre ?? '') + '?'"
+  (confirmar)="eliminar()"
+  (cancelar)="productoAEliminar = null"
+/>

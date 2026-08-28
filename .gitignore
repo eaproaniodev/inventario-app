@@ -1,0 +1,23 @@
+# ===== .NET =====
+**/bin/
+**/obj/
+*.user
+.vs/
+appsettings.Development.json
+appsettings.*.local.json
+
+# ===== Node / Angular =====
+node_modules/
+dist/
+.angular/
+npm-debug.log*
+*.log
+
+# ===== Sistema operativo / IDE =====
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# ===== Entorno =====
+*.env

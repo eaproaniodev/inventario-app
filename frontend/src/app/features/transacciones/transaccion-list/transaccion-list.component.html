@@ -1,0 +1,103 @@
+<div class="card">
+  <div class="list-header">
+    <h2>Transacciones</h2>
+    <div class="list-header__actions">
+      <button class="btn-secondary" (click)="mostrarFiltros.set(!mostrarFiltros())">
+        {{ mostrarFiltros() ? 'Ocultar filtros' : 'Filtros avanzados' }}
+      </button>
+      <a routerLink="/transacciones/nueva" class="btn-primary" style="text-decoration:none; display:inline-block;">+ Nueva transacción</a>
+    </div>
+  </div>
+
+  @if (mostrarFiltros()) {
+    <div class="filters-panel">
+      <div class="filters-grid">
+        <div class="form-row">
+          <label>ID de producto</label>
+          <input type="number" [(ngModel)]="filtros.productoId" placeholder="Ej: 1" />
+        </div>
+        <div class="form-row">
+          <label>Tipo de transacción</label>
+          <select [(ngModel)]="filtros.tipoTransaccion">
+            <option value="">Todos</option>
+            <option value="Compra">Compra</option>
+            <option value="Venta">Venta</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label>Fecha desde</label>
+          <input type="date" [(ngModel)]="filtros.fechaDesde" />
+        </div>
+        <div class="form-row">
+          <label>Fecha hasta</label>
+          <input type="date" [(ngModel)]="filtros.fechaHasta" />
+        </div>
+      </div>
+      <div class="filters-actions">
+        <button class="btn-secondary" (click)="limpiarFiltros()">Limpiar</button>
+        <button class="btn-primary" (click)="aplicarFiltros()">Aplicar filtros</button>
+      </div>
+    </div>
+  }
+
+  @if (cargando()) {
+    <p>Cargando transacciones...</p>
+  } @else if (transacciones().length === 0) {
+    <p>No se encontraron transacciones con los criterios indicados.</p>
+  } @else {
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Fecha</th>
+          <th>Tipo</th>
+          <th>Producto</th>
+          <th>Stock actual</th>
+          <th>Cantidad</th>
+          <th>P. Unitario</th>
+          <th>Total</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (t of transacciones(); track t.id) {
+          <tr>
+            <td>{{ t.id }}</td>
+            <td>{{ t.fecha | date:'short' }}</td>
+            <td>
+              <span class="badge" [class.badge--compra]="t.tipoTransaccion === 'Compra'" [class.badge--venta]="t.tipoTransaccion === 'Venta'">
+                {{ t.tipoTransaccion }}
+              </span>
+            </td>
+            <td>{{ t.productoNombre }}</td>
+            <td>{{ t.productoStockActual }}</td>
+            <td>{{ t.cantidad }}</td>
+            <td>{{ t.precioUnitario | currency }}</td>
+            <td>{{ t.precioTotal | currency }}</td>
+            <td>
+              <a [routerLink]="['/transacciones/editar', t.id]" class="btn-secondary" style="text-decoration:none; margin-right:6px;">Ver / Editar</a>
+              <button class="btn-danger" (click)="confirmarEliminar(t)">Eliminar</button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+    <app-paginator
+      [page]="filtros.page"
+      [pageSize]="filtros.pageSize"
+      [totalItems]="totalItems()"
+      [totalPages]="totalPages()"
+      (pageChange)="onPageChange($event)"
+      (pageSizeChange)="onPageSizeChange($event)"
+    />
+  }
+</div>
+
+<app-confirm-dialog
+  [visible]="!!transaccionAEliminar"
+  titulo="Eliminar transacción"
+  mensaje="Esta acción revertirá el efecto sobre el stock del producto. ¿Desea continuar?"
+  (confirmar)="eliminar()"
+  (cancelar)="transaccionAEliminar = null"
+/>

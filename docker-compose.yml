@@ -1,0 +1,26 @@
+version: '3.8'
+
+# Opcional: levanta SQL Server en un contenedor si no se cuenta con
+# LocalDB / SQL Server instalado localmente.
+#
+# Uso:
+#   docker compose up -d
+#
+# Cadena de conexión resultante (ajustar en appsettings.json de cada microservicio):
+#   Server=localhost,1433;Database=InventarioDB;User Id=sa;Password=Inventario123!;TrustServerCertificate=True
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: inventario-sqlserver
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "Inventario123!"
+      MSSQL_PID: "Developer"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+
+volumes:
+  sqlserver-data:

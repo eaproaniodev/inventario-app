@@ -1,0 +1,86 @@
+<div class="card form-card">
+  <h2>{{ modoEdicion ? 'Detalle de transacción' : 'Nueva transacción' }}</h2>
+
+  @if (cargando()) {
+    <p>Cargando...</p>
+  } @else {
+    <form [formGroup]="form" (ngSubmit)="guardar()">
+
+      @if (modoEdicion) {
+        <!-- Pantalla de consulta de información (solo lectura) -->
+        <div class="info-panel">
+          <div class="info-panel__row"><span>ID:</span><strong>{{ transaccionOriginal()?.id }}</strong></div>
+          <div class="info-panel__row"><span>Fecha:</span><strong>{{ transaccionOriginal()?.fecha | date:'medium' }}</strong></div>
+          <div class="info-panel__row"><span>Tipo:</span><strong>{{ transaccionOriginal()?.tipoTransaccion }}</strong></div>
+          <div class="info-panel__row"><span>Producto:</span><strong>{{ transaccionOriginal()?.productoNombre }}</strong></div>
+          <div class="info-panel__row"><span>Stock actual del producto:</span><strong>{{ transaccionOriginal()?.productoStockActual }}</strong></div>
+          <div class="info-panel__row"><span>Cantidad:</span><strong>{{ transaccionOriginal()?.cantidad }}</strong></div>
+          <div class="info-panel__row"><span>Precio unitario:</span><strong>{{ transaccionOriginal()?.precioUnitario | currency }}</strong></div>
+          <div class="info-panel__row"><span>Precio total:</span><strong>{{ transaccionOriginal()?.precioTotal | currency }}</strong></div>
+        </div>
+        <p class="hint-text">El tipo, producto, cantidad y precio no son editables porque ya afectaron el stock. Solo puede actualizar el detalle.</p>
+      } @else {
+        <div class="form-grid">
+          <div class="form-row">
+            <label>Tipo de transacción *</label>
+            <select formControlName="tipoTransaccion" [class.invalid]="f.tipoTransaccion.invalid && f.tipoTransaccion.touched">
+              <option value="Venta">Venta</option>
+              <option value="Compra">Compra</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <label>Producto *</label>
+            <select formControlName="productoId" [class.invalid]="f.productoId.invalid && f.productoId.touched">
+              <option [value]="0" disabled>Seleccione un producto</option>
+              @for (p of productos(); track p.id) {
+                <option [value]="p.id">{{ p.nombre }} (stock: {{ p.stock }})</option>
+              }
+            </select>
+            @if (f.productoId.invalid && f.productoId.touched) {
+              <span class="error-text">Debe seleccionar un producto.</span>
+            }
+          </div>
+
+          <div class="form-row">
+            <label>Cantidad *</label>
+            <input type="number" formControlName="cantidad" [class.invalid]="(f.cantidad.invalid && f.cantidad.touched) || stockInsuficiente" />
+            @if (f.cantidad.invalid && f.cantidad.touched) {
+              <span class="error-text">La cantidad debe ser mayor a 0.</span>
+            }
+            @if (stockInsuficiente) {
+              <span class="error-text">Stock insuficiente. Disponible: {{ stockDisponible }}</span>
+            }
+          </div>
+
+          <div class="form-row">
+            <label>Precio unitario *</label>
+            <input type="number" step="0.01" formControlName="precioUnitario" [class.invalid]="f.precioUnitario.invalid && f.precioUnitario.touched" />
+            @if (f.precioUnitario.invalid && f.precioUnitario.touched) {
+              <span class="error-text">El precio unitario debe ser mayor a 0.</span>
+            }
+          </div>
+
+          @if (productoSeleccionado()) {
+            <div class="form-row">
+              <label>Stock disponible</label>
+              <input type="text" [value]="productoSeleccionado()?.stock" disabled />
+            </div>
+          }
+        </div>
+      }
+
+      <div class="form-row" style="margin-top: 6px;">
+        <label>Detalle</label>
+        <textarea formControlName="detalle" rows="3" placeholder="Observaciones (opcional)"></textarea>
+      </div>
+
+      <div class="form-actions">
+        <a routerLink="/transacciones" class="btn-secondary" style="text-decoration:none; display:inline-block;">Volver</a>
+        <button type="submit" class="btn-primary" [disabled]="guardando()">
+          {{ guardando() ? 'Guardando...' : 'Guardar' }}
+        </button>
+      </div>
+    </form>
+  }
+</div>

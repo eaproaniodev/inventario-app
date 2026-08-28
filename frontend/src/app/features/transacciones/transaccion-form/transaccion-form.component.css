@@ -1,0 +1,45 @@
+.form-card { max-width: 700px; }
+.form-card h2 { margin-top: 0; }
+
+.form-row label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.info-panel {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.info-panel__row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px dashed #e2e8f0;
+  font-size: 14px;
+}
+
+.info-panel__row:last-child { border-bottom: none; }
+.info-panel__row span { color: #64748b; }
+
+.hint-text {
+  font-size: 13px;
+  color: #64748b;
+  margin-bottom: 16px;
+}
+
+textarea {
+  resize: vertical;
+  font-family: inherit;
+}
