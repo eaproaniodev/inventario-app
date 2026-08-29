@@ -5,7 +5,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TransaccionService } from '../../../core/services/transaccion.service';
 import { ProductoService } from '../../../core/services/producto.service';
 import { ToastService } from '../../../core/services/toast.service';
-import { Producto, Transaccion } from '../../../core/models/models';
+import { Producto, Transaccion, TipoTransaccion } from '../../../core/models/models';
 
 @Component({
   selector: 'app-transaccion-form',
@@ -31,7 +31,7 @@ export class TransaccionFormComponent implements OnInit {
   transaccionOriginal = signal<Transaccion | null>(null);
 
   form = this.fb.nonNullable.group({
-    tipoTransaccion: ['Venta', [Validators.required]],
+    tipoTransaccion: this.fb.nonNullable.control<TipoTransaccion>('Venta', [Validators.required]),
     productoId: [0, [Validators.required, Validators.min(1)]],
     cantidad: [1, [Validators.required, Validators.min(1)]],
     precioUnitario: [0, [Validators.required, Validators.min(0.01)]],
