@@ -5,7 +5,7 @@
       <button class="btn-secondary" (click)="mostrarFiltros.set(!mostrarFiltros())">
         {{ mostrarFiltros() ? 'Ocultar filtros' : 'Filtros avanzados' }}
       </button>
-      <a routerLink="/productos/nuevo" class="btn-primary" style="text-decoration:none; display:inline-block;">+ Nuevo producto</a>
+      <a routerLink="/productos/nuevo" class="btn-primary" display:inline-block;>+ Nuevo producto</a>
     </div>
   </div>
 
@@ -69,8 +69,10 @@
               </span>
             </td>
             <td>
-              <a [routerLink]="['/productos/editar', producto.id]" class="btn-secondary" style="text-decoration:none; margin-right:6px;">Editar</a>
-              <button class="btn-danger" (click)="confirmarEliminar(producto)">Eliminar</button>
+              <div class="btn-group">
+                <a [routerLink]="['/productos/editar', producto.id]" class="btn-secondary">Editar</a>
+                <button class="btn-danger" (click)="confirmarEliminar(producto)">Eliminar</button>
+              </div>
             </td>
           </tr>
         }

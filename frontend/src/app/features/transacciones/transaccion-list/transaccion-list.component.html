@@ -5,7 +5,7 @@
       <button class="btn-secondary" (click)="mostrarFiltros.set(!mostrarFiltros())">
         {{ mostrarFiltros() ? 'Ocultar filtros' : 'Filtros avanzados' }}
       </button>
-      <a routerLink="/transacciones/nueva" class="btn-primary" style="text-decoration:none; display:inline-block;">+ Nueva transacción</a>
+      <a routerLink="/transacciones/nueva" class="btn-primary">+ Nueva transacción</a>
     </div>
   </div>
 
@@ -75,8 +75,10 @@
             <td>{{ t.precioUnitario | currency }}</td>
             <td>{{ t.precioTotal | currency }}</td>
             <td>
-              <a [routerLink]="['/transacciones/editar', t.id]" class="btn-secondary" style="text-decoration:none; margin-right:6px;">Ver / Editar</a>
-              <button class="btn-danger" (click)="confirmarEliminar(t)">Eliminar</button>
+              <div class="btn-group">
+                <a [routerLink]="['/transacciones/editar', t.id]" class="btn-secondary">Ver / Editar</a>
+                <button class="btn-danger" (click)="confirmarEliminar(t)">Eliminar</button>
+              </div>
             </td>
           </tr>
         }

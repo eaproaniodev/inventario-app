@@ -18,13 +18,23 @@ body {
   color: var(--color-text);
 }
 
-button {
+button,
+.btn-primary,
+.btn-secondary,
+.btn-danger,
+.btn-success {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   border: none;
   border-radius: 6px;
   padding: 8px 14px;
   font-size: 14px;
   font-weight: 500;
+  line-height: 1.4;
+  text-decoration: none;
+  white-space: nowrap;
 }
 
 .btn-primary { background: var(--color-primary); color: #fff; }
@@ -32,7 +42,16 @@ button {
 .btn-danger { background: var(--color-danger); color: #fff; }
 .btn-secondary { background: #e2e8f0; color: var(--color-text); }
 .btn-success { background: var(--color-success); color: #fff; }
-button:disabled { opacity: 0.5; cursor: not-allowed; }
+button:disabled,
+.btn-primary:disabled,
+.btn-secondary:disabled,
+.btn-danger:disabled,
+.btn-success:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-group { display: inline-flex; gap: 8px; align-items: center; }
 
 input, select, textarea {
   padding: 8px 10px;
