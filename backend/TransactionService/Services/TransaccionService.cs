@@ -35,7 +35,7 @@ public class TransaccionService : ITransaccionService
     {
         var query = _context.Transacciones.AsQueryable();
 
-        // Filtros dinámicos
+        // Se establecen los filtros dinámicos
         if (productoId.HasValue)
             query = query.Where(t => t.ProductoId == productoId.Value);
 
@@ -83,21 +83,21 @@ public class TransaccionService : ITransaccionService
 
     public async Task<(bool ok, string mensaje, TransaccionResponseDto? data)> CrearAsync(TransaccionCreateDto dto)
     {
-        // 1. Verificar que el producto exista
+        // 1. Se verifica que el producto exista
         var producto = await _productClient.ObtenerProductoAsync(dto.ProductoId);
         if (producto is null)
             return (false, "El producto indicado no existe", null);
 
-        // 2. Si es venta, validar stock disponible ANTES de persistir la transacción
+        // 2. Si el tipo de transacción es venta, validar stock disponible antes de persistir la transacción
         if (dto.TipoTransaccion == "Venta" && producto.Stock < dto.Cantidad)
             return (false, $"Stock insuficiente. Disponible: {producto.Stock}, solicitado: {dto.Cantidad}", null);
 
-        // 3. Ajustar stock en ProductService (fuente de verdad del stock)
+        // 3. Se ajusta el stock en ProductService
         var (ok, mensaje, _) = await _productClient.AjustarStockAsync(dto.ProductoId, dto.TipoTransaccion, dto.Cantidad);
         if (!ok)
             return (false, mensaje, null);
 
-        // 4. Persistir la transacción
+        // 4. Se persiste la transacción
         var transaccion = new Transaccion
         {
             Fecha = DateTime.UtcNow,
@@ -119,7 +119,7 @@ public class TransaccionService : ITransaccionService
     public async Task<TransaccionResponseDto?> ActualizarDetalleAsync(int id, TransaccionUpdateDto dto)
     {
         // Solo se permite editar el detalle/observación: cantidad, tipo y producto
-        // son inmutables porque ya afectaron el stock (evita inconsistencias).
+        // son inmutables porque ya afectaron el stock y se vitan inconsistencias.
         var transaccion = await _context.Transacciones.FindAsync(id);
         if (transaccion is null) return null;
 
@@ -134,7 +134,7 @@ public class TransaccionService : ITransaccionService
         var transaccion = await _context.Transacciones.FindAsync(id);
         if (transaccion is null) return false;
 
-        // Revertir el efecto de la transacción sobre el stock antes de eliminarla
+        // Se revierte el efecto de la transacción sobre el stock antes de eliminarla
         var tipoReverso = transaccion.TipoTransaccion == "Venta" ? "Compra" : "Venta";
         await _productClient.AjustarStockAsync(transaccion.ProductoId, tipoReverso, transaccion.Cantidad);
 

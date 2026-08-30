@@ -19,9 +19,6 @@ public class TransactionDbContext : DbContext
             entity.Property(t => t.PrecioUnitario).HasColumnType("decimal(18,2)");
             entity.Property(t => t.PrecioTotal).HasColumnType("decimal(18,2)");
             entity.Property(t => t.Detalle).HasMaxLength(500);
-
-            // Nota: no se define FK de EF hacia Productos porque pertenece a otro
-            // microservicio/bounded context; la integridad se valida vía HTTP contra ProductService.
         });
     }
 }

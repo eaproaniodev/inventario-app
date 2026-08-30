@@ -11,7 +11,7 @@ public interface IProductServiceClient
 
 /// <summary>
 /// Cliente REST que consume la API de ProductService (comunicación síncrona
-/// entre microservicios vía HttpClient, tal como lo requiere el proyecto).
+/// entre microservicios vía HttpClient).
 /// </summary>
 public class ProductServiceClient : IProductServiceClient
 {
