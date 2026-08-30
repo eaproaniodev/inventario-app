@@ -130,11 +130,7 @@ export const environment = {
 
 ## Evidencias
 
-> Reemplazar las imágenes de esta sección con capturas reales tomadas tras
-> ejecutar la aplicación localmente (backend + frontend levantados). Guardar
-> los archivos en `docs/screenshots/` con los nombres sugeridos.
-
-| Evidencia | Archivo sugerido |
+| Evidencia | Archivo en carpeta docs |
 |---|---|
 | Listado dinámico de productos con paginación | `docs/screenshots/01-listado-productos.png` |
 | Listado dinámico de transacciones con paginación | `docs/screenshots/02-listado-transacciones.png` |
@@ -144,14 +140,3 @@ export const environment = {
 | Edición de transacción | `docs/screenshots/06-editar-transaccion.png` |
 | Filtros dinámicos (productos y/o transacciones) | `docs/screenshots/07-filtros-dinamicos.png` |
 | Consulta de información de un formulario (extra) | `docs/screenshots/08-consulta-transaccion.png` |
-
-```markdown
-![Listado de productos](docs/screenshots/01-listado-productos.png)
-![Listado de transacciones](docs/screenshots/02-listado-transacciones.png)
-![Crear producto](docs/screenshots/03-crear-producto.png)
-![Editar producto](docs/screenshots/04-editar-producto.png)
-![Crear transacción](docs/screenshots/05-crear-transaccion.png)
-![Editar transacción](docs/screenshots/06-editar-transaccion.png)
-![Filtros dinámicos](docs/screenshots/07-filtros-dinamicos.png)
-![Consulta de transacción](docs/screenshots/08-consulta-transaccion.png)
-```
