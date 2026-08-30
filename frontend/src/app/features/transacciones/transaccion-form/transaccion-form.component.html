@@ -58,6 +58,8 @@
             <input type="number" step="0.01" formControlName="precioUnitario" [class.invalid]="f.precioUnitario.invalid && f.precioUnitario.touched" />
             @if (f.precioUnitario.invalid && f.precioUnitario.touched) {
               <span class="error-text">El precio unitario debe ser mayor a 0.</span>
+            } @else if (productoSeleccionado()) {
+              <span class="hint-inline">Se autocompletó con el precio actual del producto ({{ productoSeleccionado()?.precio | currency }}). Puedes ajustarlo si el precio real de esta transacción es distinto.</span>
             }
           </div>
 

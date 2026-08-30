@@ -86,6 +86,14 @@ export class TransaccionFormComponent implements OnInit {
   private onProductoChange(id: number): void {
     const producto = this.productos().find(p => p.id === Number(id)) ?? null;
     this.productoSeleccionado.set(producto);
+
+    // Autocompletar el precio unitario con el precio actual del producto. 
+    // El campo queda editable por si el precio real de esta transacción difiere
+    // (por ejemplo, un costo de compra distinto al precio de venta del catálogo).
+    if (producto) {
+      this.form.get('precioUnitario')!.setValue(producto.precio);
+    }
+
     this.form.updateValueAndValidity();
   }
 
